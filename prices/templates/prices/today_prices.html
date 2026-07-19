@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Today's Prices — AgroPrice{% endblock %}
+
+{% block content %}
+<div class="page-wrapper container">
+  {% include "includes/breadcrumbs.html" %}
+
+  <div class="dashboard-header">
+    <div>
+      <h2>Today's Mandi Prices</h2>
+      <p class="subtitle">Latest recorded price per crop across all markets, updated today.</p>
+    </div>
+    <a href="{% url 'prices:download_csv' %}" class="btn btn-agro-outline btn-sm"><i class="bi bi-download me-1"></i>Download CSV</a>
+  </div>
+
+  <div class="card-agro p-0">
+    <div class="table-responsive">
+      <table class="table table-agro mb-0">
+        <thead><tr><th>Crop</th><th>Market</th><th>Price (₹)</th><th>Quality</th><th>Updated</th></tr></thead>
+        <tbody>
+          {% for p in prices %}
+          <tr>
+            <td class="fw-semibold">{{ p.crop_name }}</td>
+            <td>{{ p.market }}</td>
+            <td>₹{{ p.price }}</td>
+            <td><span class="badge-agro">{{ p.quality }}</span></td>
+            <td class="text-muted-soft small">{{ p.date_display }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="5" class="text-center text-muted-soft py-4">No price updates recorded today yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

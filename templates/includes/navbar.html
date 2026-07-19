@@ -1,0 +1,39 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-agro sticky-top">
+  <div class="container">
+    <a class="navbar-brand navbar-brand-agro" href="{% url 'core:home' %}">
+      <span class="logo-icon"><i class="bi bi-flower1"></i></span>
+      AgroPrice
+    </a>
+
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link nav-link-agro" href="{% url 'core:home' %}">Home</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-agro" href="{% url 'crops:crop_list' %}">Crops</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-agro" href="{% url 'prices:today_prices' %}">Today's Prices</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-agro" href="{% url 'prices:compare_markets' %}">Compare Markets</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-agro" href="{% url 'analytics:trend_analysis' %}">Trends</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-agro" href="{% url 'analytics:revenue_calculator' %}">Calculator</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-agro" href="{% url 'core:about' %}">About</a></li>
+        <li class="nav-item"><a class="nav-link nav-link-agro" href="{% url 'core:contact' %}">Contact</a></li>
+      </ul>
+
+      <div class="d-flex gap-2 align-items-center">
+        {% if request.user.is_authenticated %}
+          <a href="{% if request.user.is_staff %}{% url 'dashboard:admin_dashboard' %}{% else %}{% url 'dashboard:farmer_dashboard' %}{% endif %}"
+             class="btn btn-agro-outline btn-sm">
+            <i class="bi bi-speedometer2 me-1"></i>Dashboard
+          </a>
+          <a href="{% url 'accounts:logout' %}" class="btn btn-agro btn-sm">Logout</a>
+        {% else %}
+          <a href="{% url 'accounts:farmer_login' %}" class="btn btn-agro-outline btn-sm">Farmer Login</a>
+          <a href="{% url 'accounts:farmer_register' %}" class="btn btn-agro btn-sm">Get Started</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>

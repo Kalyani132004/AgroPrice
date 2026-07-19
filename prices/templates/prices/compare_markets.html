@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Compare Markets — AgroPrice{% endblock %}
+
+{% block content %}
+<div class="page-wrapper container">
+  {% include "includes/breadcrumbs.html" %}
+
+  <div class="dashboard-header">
+    <div>
+      <h2>Compare Markets</h2>
+      <p class="subtitle">See how the same crop is priced across different mandis right now.</p>
+    </div>
+  </div>
+
+  <div class="card-agro p-3 mb-4">
+    <label class="form-label">Select Crop</label>
+    <select id="compareCropSelect" class="form-select" style="max-width:320px;">
+      <option value="">Choose a crop</option>
+      {% for crop in crops %}
+        <option value="{{ crop.name }}" {% if crop.name == selected_crop %}selected{% endif %}>{{ crop.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  {% if selected_crop %}
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="card-agro p-0">
+          <div class="table-responsive">
+            <table class="table table-agro mb-0">
+              <thead><tr><th>Market</th><th>Price (₹)</th><th>Quality</th></tr></thead>
+              <tbody>
+                {% for m in comparisons %}
+                <tr>
+                  <td class="fw-semibold">{{ m.market }}</td>
+                  <td>₹{{ m.price }}</td>
+                  <td><span class="badge-agro">{{ m.quality }}</span></td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="3" class="text-center text-muted-soft py-4">No market data for this crop yet.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="chart-card">
+          <h6><i class="bi bi-bar-chart me-1"></i>Price by Market</h6>
+          <canvas id="marketBarChart"></canvas>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div class="empty-state"><i class="bi bi-shop-window"></i><h5>Select a crop</h5><p>Choose a crop above to compare its prices across markets.</p></div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/compare-markets.js' %}"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const labels = [{% for m in comparisons %}"{{ m.market }}"{% if not forloop.last %},{% endif %}{% endfor %}];
+    const prices = [{% for m in comparisons %}{{ m.price }}{% if not forloop.last %},{% endif %}{% endfor %}];
+    if (labels.length) renderBarChart("marketBarChart", labels, prices, "Price (₹)");
+  });
+</script>
+{% endblock %}

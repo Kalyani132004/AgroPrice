@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Add Price — Admin — AgroPrice{% endblock %}
+
+{% block content %}
+<div class="page-wrapper container">
+  {% include "includes/breadcrumbs.html" %}
+
+  <div class="dashboard-header">
+    <div>
+      <h2>Add Price Record</h2>
+      <p class="subtitle">Manually add a single mandi price entry.</p>
+    </div>
+    <a href="{% url 'prices:upload_csv' %}" class="btn btn-agro-outline btn-sm"><i class="bi bi-cloud-upload me-1"></i>Bulk Upload CSV Instead</a>
+  </div>
+
+  <div class="card-agro p-4" style="max-width: 640px;">
+    <form method="post">
+      {% csrf_token %}
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Crop</label>
+          <select name="crop_name" class="form-select" required>
+            <option value="">Select crop</option>
+            {% for crop in crops %}<option value="{{ crop.name }}">{{ crop.name }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Market / Mandi</label>
+          <input type="text" name="market" class="form-control" required placeholder="e.g. Pune Mandi">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Price (₹)</label>
+          <input type="text" name="price" class="form-control" required placeholder="e.g. 2150">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Quality</label>
+          <select name="quality" class="form-select">
+            <option value="FAQ">FAQ</option>
+            <option value="Grade-A">Grade-A</option>
+            <option value="Grade-B">Grade-B</option>
+            <option value="Premium">Premium</option>
+            <option value="Standard">Standard</option>
+          </select>
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-agro w-100"><i class="bi bi-plus-lg me-2"></i>Add Price</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

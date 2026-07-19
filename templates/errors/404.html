@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Page Not Found — AgroPrice{% endblock %}
+
+{% block content %}
+<div class="page-wrapper container d-flex align-items-center justify-content-center" style="min-height: 70vh;">
+  <div class="text-center">
+    <i class="bi bi-signpost-2" style="font-size: 5rem; color: var(--color-secondary);"></i>
+    <h1 class="fw-bold mt-3" style="font-size: 2.4rem;">404 — Field Not Found</h1>
+    <p class="text-muted-soft mb-4">Looks like this page has been harvested already. Let's get you back on track.</p>
+    <a href="{% url 'core:home' %}" class="btn btn-agro btn-lg"><i class="bi bi-house-door me-2"></i>Back to Home</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Historical Prices — AgroPrice{% endblock %}
+
+{% block content %}
+<div class="page-wrapper container">
+  {% include "includes/breadcrumbs.html" %}
+
+  <div class="dashboard-header">
+    <div>
+      <h2>Historical Prices</h2>
+      <p class="subtitle">View past price records for any crop over a custom time window.</p>
+    </div>
+  </div>
+
+  <form method="get" class="card-agro p-3 mb-4 d-flex flex-wrap gap-3 align-items-end flex-row">
+    <div style="min-width:220px;">
+      <label class="form-label">Crop</label>
+      <select name="crop" class="form-select" onchange="this.form.submit()">
+        <option value="">Select a crop</option>
+        {% for crop in crops %}
+          <option value="{{ crop.name }}" {% if crop.name == selected_crop %}selected{% endif %}>{{ crop.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div style="min-width:160px;">
+      <label class="form-label">Time Window</label>
+      <select name="days" class="form-select" onchange="this.form.submit()">
+        <option value="7" {% if days == 7 %}selected{% endif %}>Last 7 Days</option>
+        <option value="30" {% if days == 30 %}selected{% endif %}>Last 30 Days</option>
+        <option value="90" {% if days == 90 %}selected{% endif %}>Last 90 Days</option>
+      </select>
+    </div>
+  </form>
+
+  {% if selected_crop %}
+    <div class="row g-4 mb-4">
+      <div class="col-md-4">
+        <div class="stat-card"><div class="stat-icon icon-green"><i class="bi bi-cash-stack"></i></div><div class="stat-value">₹{{ stats.avg_price|default:"0" }}</div><div class="stat-label">Average Price</div></div>
+      </div>
+      <div class="col-md-4">
+        <div class="stat-card"><div class="stat-icon icon-amber"><i class="bi bi-arrow-up-circle"></i></div><div class="stat-value">₹{{ stats.max_price|default:"0" }}</div><div class="stat-label">Highest Price</div></div>
+      </div>
+      <div class="col-md-4">
+        <div class="stat-card"><div class="stat-icon icon-blue"><i class="bi bi-arrow-down-circle"></i></div><div class="stat-value">₹{{ stats.min_price|default:"0" }}</div><div class="stat-label">Lowest Price</div></div>
+      </div>
+    </div>
+
+    <div class="chart-card mb-4">
+      <h6><i class="bi bi-graph-up me-1"></i>{{ selected_crop }} — Price History</h6>
+      <canvas id="historyChart"></canvas>
+    </div>
+
+    <div class="card-agro p-0">
+      <div class="table-responsive">
+        <table class="table table-agro mb-0">
+          <thead><tr><th>Date</th><th>Market</th><th>Price (₹)</th></tr></thead>
+          <tbody>
+            {% for h in history %}
+            <tr><td>{{ h.date_display }}</td><td>{{ h.market }}</td><td>₹{{ h.price }}</td></tr>
+            {% empty %}
+            <tr><td colspan="3" class="text-center text-muted-soft py-4">No historical data found for this crop/window.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% else %}
+    <div class="empty-state"><i class="bi bi-clock-history"></i><h5>Select a crop</h5><p>Choose a crop above to view its historical prices.</p></div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const labels = [{% for h in history %}"{{ h.date_display|slice:':11' }}"{% if not forloop.last %},{% endif %}{% endfor %}];
+    const prices = [{% for h in history %}{{ h.price }}{% if not forloop.last %},{% endif %}{% endfor %}];
+    if (labels.length) renderLineChart("historyChart", labels, prices, "{{ selected_crop }} Price (₹)");
+  });
+</script>
+{% endblock %}

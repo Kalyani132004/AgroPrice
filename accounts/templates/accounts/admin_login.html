@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Admin Login — AgroPrice{% endblock %}
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="auth-shell">
+  <div class="auth-visual d-none d-lg-flex" style="background: linear-gradient(160deg, #1B5E20, #263238);">
+    <svg class="auth-illustration" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="330" cy="55" r="42" fill="rgba(255,255,255,0.08)"/>
+      <path d="M160,40 L235,65 V150 C235,205 205,245 160,270 C115,245 85,205 85,150 V65 Z" fill="rgba(255,255,255,0.10)"/>
+      <path d="M160,55 L218,75 V148 C218,192 196,224 160,246 C124,224 102,192 102,148 V75 Z" fill="#FFC107" opacity="0.9"/>
+      <path d="M135,150 L155,172 L192,122" stroke="#1B5E20" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="60" y="255" width="30" height="45" rx="4" fill="#66BB6A"/>
+      <rect x="100" y="235" width="30" height="65" rx="4" fill="#2E7D32"/>
+      <rect x="270" y="245" width="30" height="55" rx="4" fill="#66BB6A"/>
+      <rect x="310" y="225" width="30" height="75" rx="4" fill="#2E7D32"/>
+    </svg>
+    <h2 class="fw-bold mt-4">Admin Control Panel</h2>
+    <p class="opacity-75" style="max-width: 420px;">Manage crops, upload daily mandi price sheets, and monitor platform-wide reports.</p>
+    <div class="mt-4">
+      <a href="{% url 'core:home' %}" class="text-white text-decoration-underline"><i class="bi bi-arrow-left me-1"></i> Back to Home</a>
+    </div>
+  </div>
+
+  <div class="auth-form-side">
+    <div class="auth-card">
+      <h3 class="fw-bold mb-1"><i class="bi bi-shield-lock me-2"></i>Admin Login</h3>
+      <p class="text-muted-soft mb-4">Restricted access — authorized administrators only.</p>
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          {{ form.username }}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          {{ form.password }}
+        </div>
+        <button type="submit" class="btn btn-agro w-100 mb-3"><i class="bi bi-box-arrow-in-right me-2"></i>Login as Admin</button>
+      </form>
+
+      <p class="text-center small"><a href="{% url 'accounts:farmer_login' %}"><i class="bi bi-arrow-left me-1"></i>Back to Farmer Login</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

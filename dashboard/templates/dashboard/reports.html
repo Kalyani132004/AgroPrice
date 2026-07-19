@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Reports — Admin — AgroPrice{% endblock %}
+
+{% block content %}
+<div class="dashboard-shell">
+  <aside class="sidebar-agro d-none d-lg-block">
+    <div class="sidebar-section-label">Overview</div>
+    <a href="{% url 'dashboard:admin_dashboard' %}" class="sidebar-link"><i class="bi bi-speedometer2"></i>Dashboard</a>
+    <a href="{% url 'dashboard:reports' %}" class="sidebar-link active"><i class="bi bi-file-earmark-bar-graph"></i>Reports</a>
+    <a href="{% url 'dashboard:contact_messages' %}" class="sidebar-link"><i class="bi bi-envelope"></i>Contact Messages</a>
+    <div class="sidebar-section-label">Crops</div>
+    <a href="{% url 'crops:manage_crops' %}" class="sidebar-link"><i class="bi bi-basket3"></i>Manage Crops</a>
+    <div class="sidebar-section-label">Prices</div>
+    <a href="{% url 'prices:upload_csv' %}" class="sidebar-link"><i class="bi bi-cloud-upload"></i>Upload CSV</a>
+    <a href="{% url 'prices:download_csv' %}" class="sidebar-link"><i class="bi bi-download"></i>Download CSV</a>
+  </aside>
+
+  <div class="dashboard-main">
+    <div class="dashboard-header">
+      <div>
+        <h2>Platform Reports</h2>
+        <p class="subtitle">Summary of today's activity across AgroPrice.</p>
+      </div>
+      <a href="{% url 'prices:download_csv' %}" class="btn btn-agro-outline btn-sm"><i class="bi bi-download me-1"></i>Export CSV</a>
+    </div>
+
+    <div class="row g-4 mb-4">
+      <div class="col-md-4">
+        <div class="stat-card"><div class="stat-icon icon-green"><i class="bi bi-people"></i></div><div class="stat-value">{{ total_farmers }}</div><div class="stat-label">Registered Farmers</div></div>
+      </div>
+      <div class="col-md-4">
+        <div class="stat-card"><div class="stat-icon icon-blue"><i class="bi bi-clipboard-data"></i></div><div class="stat-value">{{ total_records }}</div><div class="stat-label">Price Records Today</div></div>
+      </div>
+      <div class="col-md-4">
+        <div class="stat-card"><div class="stat-icon icon-amber"><i class="bi bi-calendar-check"></i></div><div class="stat-value">{% now "d M Y" %}</div><div class="stat-label">Report Date</div></div>
+      </div>
+    </div>
+
+    <div class="card-agro p-0">
+      <div class="table-responsive">
+        <table class="table table-agro mb-0">
+          <thead><tr><th>Crop</th><th>Market</th><th>Price (₹)</th><th>Quality</th><th>Updated</th></tr></thead>
+          <tbody>
+            {% for p in today_prices %}
+            <tr>
+              <td class="fw-semibold">{{ p.crop_name }}</td>
+              <td>{{ p.market }}</td>
+              <td>₹{{ p.price }}</td>
+              <td><span class="badge-agro">{{ p.quality }}</span></td>
+              <td class="text-muted-soft small">{{ p.date_display }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="text-center text-muted-soft py-4">No price data recorded today.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

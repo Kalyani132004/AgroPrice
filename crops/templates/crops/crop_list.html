@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Crop List — AgroPrice{% endblock %}
+
+{% block content %}
+<div class="page-wrapper container">
+  {% include "includes/breadcrumbs.html" %}
+
+  <div class="dashboard-header">
+    <div>
+      <h2>Crop List</h2>
+      <p class="subtitle">Browse all crops tracked on AgroPrice.</p>
+    </div>
+    <form method="get" class="search-agro" style="min-width: 300px;">
+      <i class="bi bi-search"></i>
+      <input type="text" name="q" class="form-control" placeholder="Search crops..." value="{{ query }}">
+    </form>
+  </div>
+
+  {% if page_obj.object_list %}
+    <div class="row g-4">
+      {% for crop in page_obj %}
+        <div class="col-md-4">
+          <a href="{% url 'crops:crop_detail' crop.id %}" class="text-decoration-none text-dark">
+            <div class="card-agro p-4 h-100">
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <div class="stat-icon icon-green"><i class="bi bi-basket3"></i></div>
+                <span class="badge-agro">{{ crop.category }}</span>
+              </div>
+              <h5 class="fw-bold mb-1">{{ crop.name }}</h5>
+              <p class="text-muted-soft small mb-0">Priced per {{ crop.unit }}</p>
+              <p class="text-muted-soft small">{{ crop.quality_grades|join:", " }}</p>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+    {% include "includes/pagination.html" %}
+  {% else %}
+    <div class="empty-state">
+      <i class="bi bi-inboxes"></i>
+      <h5>No crops found</h5>
+      <p>Try a different search term{% if request.user.is_staff %}, or add a new crop from Manage Crops.{% endif %}</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

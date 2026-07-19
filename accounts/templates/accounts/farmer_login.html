@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Farmer Login — AgroPrice{% endblock %}
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="auth-shell">
+  <div class="auth-visual d-none d-lg-flex">
+    <svg class="auth-illustration" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="330" cy="55" r="42" fill="rgba(255,255,255,0.12)"/>
+      <circle cx="330" cy="55" r="26" fill="#FFC107"/>
+      <path d="M0,250 Q100,215 200,240 T400,225 V320 H0 Z" fill="rgba(255,255,255,0.08)"/>
+      <path d="M0,275 Q120,250 240,270 T400,258 V320 H0 Z" fill="rgba(255,255,255,0.14)"/>
+      <ellipse cx="160" cy="288" rx="100" ry="14" fill="rgba(0,0,0,0.12)"/>
+      <path d="M90,190 L230,190 L212,270 L108,270 Z" fill="#ffffff" opacity="0.95"/>
+      <path d="M90,190 L230,190 L222,208 L98,208 Z" fill="#F8FFF5"/>
+      <path d="M100,190 Q160,150 220,190" stroke="#66BB6A" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <circle cx="130" cy="185" r="16" fill="#FFC107"/>
+      <circle cx="165" cy="178" r="18" fill="#66BB6A"/>
+      <circle cx="200" cy="186" r="15" fill="#2E7D32"/>
+      <path d="M118,208 L128,265 M160,208 L162,265 M202,208 L192,265" stroke="#DCE9DA" stroke-width="2"/>
+    </svg>
+    <h2 class="fw-bold mt-4">Welcome back, Farmer.</h2>
+    <p class="opacity-75" style="max-width: 420px;">Check today's mandi prices, track your favorite crops, and calculate your profit — all in one login.</p>
+    <div class="mt-4">
+      <a href="{% url 'core:home' %}" class="text-white text-decoration-underline"><i class="bi bi-arrow-left me-1"></i> Back to Home</a>
+    </div>
+  </div>
+
+  <div class="auth-form-side">
+    <div class="auth-card">
+      <h3 class="fw-bold mb-1">Farmer Login</h3>
+      <p class="text-muted-soft mb-4">Enter your credentials to access your dashboard.</p>
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          {{ form.username }}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          {{ form.password }}
+        </div>
+        <button type="submit" class="btn btn-agro w-100 mb-3"><i class="bi bi-box-arrow-in-right me-2"></i>Login</button>
+      </form>
+
+      <p class="text-center small text-muted-soft">Don't have an account? <a href="{% url 'accounts:farmer_register' %}">Register here</a></p>
+      <p class="text-center small"><a href="{% url 'accounts:admin_login' %}"><i class="bi bi-shield-lock me-1"></i>Login as Admin instead</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

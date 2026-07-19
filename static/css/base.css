@@ -1,0 +1,240 @@
+/* ===========================================================
+   AgroPrice — Base Design System
+   Modern SaaS-dashboard aesthetic (Notion/Linear/Vercel-inspired)
+   with an agritech green identity. Clean, minimal, professional.
+=========================================================== */
+
+:root {
+  /* Brand palette */
+  --color-primary: #2E7D32;
+  --color-primary-dark: #1B5E20;
+  --color-secondary: #66BB6A;
+  --color-accent: #FFC107;
+  --color-bg: #F8FFF5;
+  --color-text: #263238;
+
+  /* Neutrals (Notion/Linear-style grays) */
+  --color-surface: #FFFFFF;
+  --color-surface-muted: #F3F6F2;
+  --color-border: #E3E9E1;
+  --color-text-muted: #6B7A70;
+  --color-text-faint: #98A69C;
+
+  /* Status colors */
+  --color-success: #2E7D32;
+  --color-danger: #D32F2F;
+  --color-warning: #FFC107;
+  --color-info: #0288D1;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(38, 50, 32, 0.06);
+  --shadow-md: 0 4px 16px rgba(38, 50, 32, 0.08);
+  --shadow-lg: 0 12px 32px rgba(38, 50, 32, 0.12);
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+
+  /* Spacing rhythm */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 40px;
+
+  /* Typography */
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-size: 15.5px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+a { color: var(--color-primary); text-decoration: none; transition: color 0.15s ease; }
+a:hover { color: var(--color-primary-dark); }
+
+::selection { background: var(--color-secondary); color: #fff; }
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-faint); }
+
+/* ---------- Layout helpers ---------- */
+.page-wrapper {
+  min-height: calc(100vh - 140px);
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-5);
+}
+
+.section-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: var(--space-1);
+}
+
+.section-subtitle {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  margin-bottom: var(--space-4);
+}
+
+.text-muted-soft { color: var(--color-text-muted) !important; }
+.text-faint { color: var(--color-text-faint) !important; }
+
+.bg-brand-surface { background: var(--color-surface); }
+.bg-brand-muted { background: var(--color-surface-muted); }
+
+/* ---------- Buttons ---------- */
+.btn-agro {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 1.4rem;
+  font-weight: 600;
+  font-size: 0.92rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  box-shadow: var(--shadow-sm);
+}
+.btn-agro:hover {
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  opacity: 0.95;
+}
+.btn-agro:active { transform: translateY(0); }
+
+.btn-agro-outline {
+  background: transparent;
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 1.35rem;
+  font-weight: 600;
+  font-size: 0.92rem;
+  transition: all 0.15s ease;
+}
+.btn-agro-outline:hover {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.btn-accent {
+  background: var(--color-accent);
+  color: #3d2c00;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  padding: 0.6rem 1.35rem;
+  transition: all 0.15s ease;
+}
+.btn-accent:hover { filter: brightness(0.95); color: #3d2c00; }
+
+/* ---------- Cards ---------- */
+.card-agro {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.card-agro:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.card-agro-flat {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+/* ---------- Forms ---------- */
+.form-control, .form-select {
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-border);
+  padding: 0.6rem 0.9rem;
+  font-size: 0.92rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 3px rgba(102, 187, 106, 0.18);
+}
+
+.form-label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.35rem;
+}
+
+/* ---------- Badges ---------- */
+.badge-agro {
+  background: rgba(46, 125, 50, 0.1);
+  color: var(--color-primary-dark);
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.35em 0.7em;
+  border-radius: 999px;
+}
+.badge-agro-warning {
+  background: rgba(255, 193, 7, 0.18);
+  color: #8a6d00;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.35em 0.7em;
+  border-radius: 999px;
+}
+.badge-agro-danger {
+  background: rgba(211, 47, 47, 0.1);
+  color: var(--color-danger);
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.35em 0.7em;
+  border-radius: 999px;
+}
+
+/* ---------- Tables ---------- */
+.table-agro {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.table-agro thead th {
+  background: var(--color-surface-muted);
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  border-bottom: 1px solid var(--color-border);
+  padding: 0.85rem 1rem;
+}
+.table-agro tbody td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+.table-agro tbody tr:last-child td { border-bottom: none; }
+.table-agro tbody tr { transition: background 0.12s ease; }
+.table-agro tbody tr:hover { background: var(--color-surface-muted); }

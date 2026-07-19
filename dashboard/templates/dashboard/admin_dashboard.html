@@ -1,0 +1,364 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard — AgroPrice{% endblock %}
+
+{% block content %}
+<div class="dashboard-shell">
+
+  <aside class="sidebar-agro d-none d-lg-block">
+
+    <div class="sidebar-section-label">Overview</div>
+
+    <a href="{% url 'dashboard:admin_dashboard' %}" class="sidebar-link active">
+      <i class="bi bi-speedometer2"></i>Dashboard
+    </a>
+
+    <a href="{% url 'dashboard:reports' %}" class="sidebar-link">
+      <i class="bi bi-file-earmark-bar-graph"></i>Reports
+    </a>
+
+    <a href="{% url 'dashboard:contact_messages' %}" class="sidebar-link">
+      <i class="bi bi-envelope"></i>Contact Messages
+    </a>
+
+
+    <div class="sidebar-section-label">Crops</div>
+
+    <a href="{% url 'crops:manage_crops' %}" class="sidebar-link">
+      <i class="bi bi-basket3"></i>Manage Crops
+    </a>
+
+    <a href="{% url 'crops:crop_list' %}" class="sidebar-link">
+      <i class="bi bi-list-ul"></i>Crop List
+    </a>
+
+
+    <div class="sidebar-section-label">Prices</div>
+
+    <a href="{% url 'prices:add_price' %}" class="sidebar-link">
+      <i class="bi bi-plus-circle"></i>Add Price
+    </a>
+
+    <a href="{% url 'prices:upload_csv' %}" class="sidebar-link">
+      <i class="bi bi-cloud-upload"></i>Upload CSV
+    </a>
+
+    <a href="{% url 'prices:download_csv' %}" class="sidebar-link">
+      <i class="bi bi-download"></i>Download CSV
+    </a>
+
+    <div class="sidebar-section-label">Farmers</div>
+
+    <a href="{% url 'dashboard:registered_farmers' %}" class="sidebar-link">
+        <i class="bi bi-people"></i>
+        Registered Farmers
+    </a>
+
+    <div class="sidebar-section-label">Account</div>
+
+    <a href="{% url 'accounts:profile' %}" class="sidebar-link">
+      <i class="bi bi-person"></i>Profile
+    </a>
+
+    <a href="{% url 'accounts:logout' %}" class="sidebar-link">
+      <i class="bi bi-box-arrow-right"></i>Logout
+    </a>
+
+  </aside>
+
+
+  <div class="dashboard-main">
+
+
+    <div class="dashboard-header">
+
+      <div>
+        <h2>Admin Dashboard</h2>
+        <p class="subtitle">
+          Platform-wide overview and quick actions.
+        </p>
+      </div>
+
+      <a href="{% url 'crops:manage_crops' %}" class="btn btn-agro">
+        <i class="bi bi-plus-lg me-1"></i>
+        Manage Crops
+      </a>
+
+    </div>
+
+
+
+    <!-- Statistics Cards -->
+
+    <div class="row g-4 mb-4">
+
+
+      <div class="col-md-3 col-6">
+        <div class="stat-card">
+
+          <div class="stat-icon icon-green">
+            <i class="bi bi-basket3"></i>
+          </div>
+
+          <div class="stat-value">
+            {{ total_crops }}
+          </div>
+
+          <div class="stat-label">
+            Total Crops
+          </div>
+
+        </div>
+      </div>
+
+
+
+      <div class="col-md-3 col-6">
+
+        <div class="stat-card">
+
+          <div class="stat-icon icon-blue">
+            <i class="bi bi-people"></i>
+          </div>
+
+          <div class="stat-value">
+            {{ total_farmers }}
+          </div>
+
+          <div class="stat-label">
+              Registered Farmers
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+
+      <div class="col-md-3 col-6">
+
+        <div class="stat-card">
+
+          <div class="stat-icon icon-amber">
+            <i class="bi bi-arrow-up-circle"></i>
+          </div>
+
+          <div class="stat-value">
+            ₹{{ highest_price }}
+          </div>
+
+          <div class="stat-label">
+            Highest Price Today
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="col-md-3 col-6">
+
+        <div class="stat-card">
+
+          <div class="stat-icon icon-red">
+            <i class="bi bi-fire"></i>
+          </div>
+
+          <div class="stat-value" style="font-size:1.1rem;">
+            {{ trending_crop }}
+          </div>
+
+          <div class="stat-label">
+            Trending Crop
+          </div>
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+
+
+
+    <!-- Charts -->
+
+    <div class="row g-4 mb-4">
+
+
+      <div class="col-lg-6">
+
+        <div class="chart-card">
+
+          <h6>
+            <i class="bi bi-pie-chart me-1"></i>
+            Latest Prices Snapshot
+          </h6>
+
+          <canvas id="adminPieChart"></canvas>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="col-lg-6">
+
+        <div class="chart-card">
+
+          <h6>
+            <i class="bi bi-bar-chart me-1"></i>
+            Crops by Category
+          </h6>
+
+          <canvas id="adminBarChart"></canvas>
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+
+
+
+    <!-- Latest Prices Table -->
+
+    <div class="card-agro p-0">
+
+      <div class="table-responsive">
+
+        <table class="table table-agro mb-0">
+
+
+          <thead>
+
+            <tr>
+              <th>Crop</th>
+              <th>Latest Price</th>
+              <th>Market</th>
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+
+          {% for name, doc in latest_prices.items %}
+
+            <tr>
+
+              <td class="fw-semibold">
+                {{ name }}
+              </td>
+
+
+              {% if doc %}
+
+                <td>
+                  ₹{{ doc.price }}
+                </td>
+
+
+                <td>
+                  {{ doc.market }}
+                </td>
+
+
+              {% else %}
+
+                <td colspan="2" class="text-muted-soft">
+                  No data
+                </td>
+
+              {% endif %}
+
+            </tr>
+
+
+          {% empty %}
+
+            <tr>
+
+              <td colspan="3"
+                  class="text-center text-muted-soft py-4">
+
+                  No crops added yet.
+
+              </td>
+
+            </tr>
+
+
+          {% endfor %}
+
+
+          </tbody>
+
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+</div>
+
+{% endblock %}
+
+
+
+
+{% block extra_js %}
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+    const pieData = {{ pie_chart_json|safe }};
+
+    const barData = {{ bar_chart_json|safe }};
+
+
+
+    if (pieData.labels && pieData.labels.length) {
+
+        renderPieChart(
+            "adminPieChart",
+            pieData.labels,
+            pieData.values
+        );
+
+    }
+
+
+
+    if (barData.labels && barData.labels.length) {
+
+        renderBarChart(
+            "adminBarChart",
+            barData.labels,
+            barData.values,
+            "Crops"
+        );
+
+    }
+
+
+});
+
+
+</script>
+
+{% endblock %}

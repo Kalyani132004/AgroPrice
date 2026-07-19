@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}Farmer Dashboard — AgroPrice{% endblock %}
+
+{% block content %}
+<div class="page-wrapper container">
+  <div class="dashboard-header">
+    <div>
+      <h2>Welcome back, {{ request.user.first_name|default:request.user.username }} 👋</h2>
+      <p class="subtitle">Here's what's happening in the mandi today.</p>
+    </div>
+    <a href="{% url 'crops:crop_list' %}" class="btn btn-agro"><i class="bi bi-search me-1"></i>Search Crops</a>
+  </div>
+
+  <div class="row g-4 mb-4">
+    <div class="col-md-3 col-6">
+      <div class="stat-card"><div class="stat-icon icon-green"><i class="bi bi-basket3"></i></div><div class="stat-value">{{ total_crops }}</div><div class="stat-label">Total Crops</div></div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="stat-card"><div class="stat-icon icon-amber"><i class="bi bi-arrow-up-circle"></i></div><div class="stat-value">₹{{ highest_price }}</div><div class="stat-label">Highest Price Today</div></div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="stat-card"><div class="stat-icon icon-blue"><i class="bi bi-arrow-down-circle"></i></div><div class="stat-value">₹{{ lowest_price }}</div><div class="stat-label">Lowest Price Today</div></div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="stat-card"><div class="stat-icon icon-red"><i class="bi bi-fire"></i></div><div class="stat-value" style="font-size:1.1rem;">{{ trending_crop }}</div><div class="stat-label">Most Trending Crop</div></div>
+    </div>
+  </div>
+
+  <div class="row g-4 mb-4">
+    <div class="col-lg-7">
+      <div class="chart-card">
+        <h6><i class="bi bi-pie-chart me-1"></i>Latest Prices Snapshot</h6>
+        <canvas id="farmerPieChart"></canvas>
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <div class="row g-3">
+        <div class="col-6">
+          <a href="{% url 'prices:today_prices' %}" class="text-decoration-none">
+            <div class="quick-action-card"><i class="bi bi-graph-up"></i><span class="fw-semibold small">Today's Prices</span></div>
+          </a>
+        </div>
+        <div class="col-6">
+          <a href="{% url 'prices:compare_markets' %}" class="text-decoration-none">
+            <div class="quick-action-card"><i class="bi bi-bar-chart"></i><span class="fw-semibold small">Compare Markets</span></div>
+          </a>
+        </div>
+        <div class="col-6">
+          <a href="{% url 'analytics:revenue_calculator' %}" class="text-decoration-none">
+            <div class="quick-action-card"><i class="bi bi-calculator"></i><span class="fw-semibold small">Profit Calculator</span></div>
+          </a>
+        </div>
+        <div class="col-6">
+          <a href="{% url 'accounts:profile' %}" class="text-decoration-none">
+            <div class="quick-action-card"><i class="bi bi-person"></i><span class="fw-semibold small">My Profile</span></div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-header">
+    <div>
+      <h4 class="fw-bold mb-0">{% if has_watchlist %}Your Watchlist{% else %}Popular Crops{% endif %}</h4>
+      <p class="text-muted-soft small mb-0">
+        {% if has_watchlist %}Live prices and Sell/Hold guidance for the crops you're tracking.{% else %}You haven't added any crops to your watchlist yet — visit any crop's page and tap "Add to Watchlist".{% endif %}
+      </p>
+    </div>
+    {% if has_watchlist %}<a href="{% url 'crops:crop_list' %}" class="btn btn-agro-outline btn-sm"><i class="bi bi-plus-lg me-1"></i>Track Another Crop</a>{% endif %}
+  </div>
+
+  {% if has_watchlist %}
+    <div class="row g-4">
+      {% for item in watchlist_items %}
+        <div class="col-md-6 col-lg-4">
+          <div class="card-agro p-4 h-100 position-relative">
+            {% if item.alert_triggered %}
+              <span class="alert-badge position-absolute top-0 end-0 m-3"><i class="bi bi-bell-fill"></i> Alert!</span>
+            {% endif %}
+            <h5 class="fw-bold mb-1">{{ item.crop_name }}</h5>
+            <p class="text-muted-soft small mb-3">
+              {% if item.latest_price %}₹{{ item.latest_price }} · {{ item.market }}{% else %}No price data yet{% endif %}
+              {% if item.alert_threshold %}<br>Alert set at ₹{{ item.alert_threshold }}{% endif %}
+            </p>
+            <span class="verdict-pill {% if 'Sell' in item.recommendation.verdict %}pill-sell{% elif 'Hold' in item.recommendation.verdict %}pill-hold{% else %}pill-neutral{% endif %}">
+              <i class="bi bi-lightbulb"></i> {{ item.recommendation.verdict }}
+            </span>
+            {% if item.crop_id %}<a href="{% url 'crops:crop_detail' item.crop_id %}" class="stretched-link"></a>{% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="card-agro p-0">
+      <div class="table-responsive">
+        <table class="table table-agro mb-0">
+          <thead><tr><th>Crop</th><th>Latest Price</th><th>Market</th></tr></thead>
+          <tbody>
+            {% for name, doc in latest_prices.items %}
+            <tr>
+              <td class="fw-semibold">{{ name }}</td>
+              {% if doc %}
+                <td>₹{{ doc.price }}</td>
+                <td>{{ doc.market }}</td>
+              {% else %}
+                <td colspan="2" class="text-muted-soft">No price data yet</td>
+              {% endif %}
+            </tr>
+            {% empty %}
+            <tr><td colspan="3" class="text-center text-muted-soft py-4">No crops added yet. Check back soon!</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const pieData = {{ pie_chart_json|safe }};
+    if (pieData.labels && pieData.labels.length) {
+      renderPieChart("farmerPieChart", pieData.labels, pieData.values);
+    }
+  });
+</script>
+{% endblock %}

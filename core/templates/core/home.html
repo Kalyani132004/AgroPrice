@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}AgroPrice — Mandi Price Tracker & Crop Profit Analyzer{% endblock %}
+
+{% block content %}
+
+<section class="hero-agro">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6 animate-fade-up">
+        <span class="hero-eyebrow"><i class="bi bi-stars"></i> Agritech · Real-time Mandi Data</span>
+        <h1>Know your crop's <span style="color:var(--color-primary);">real worth</span>, every single day.</h1>
+        <p class="hero-lead">Track live mandi prices, compare markets, analyze 30-day trends, and calculate your exact crop profit — all in one place, built for Indian farmers.</p>
+        <div class="d-flex flex-wrap gap-2">
+          <a href="{% url 'accounts:farmer_register' %}" class="btn btn-agro btn-lg"><i class="bi bi-person-plus me-2"></i>Get Started Free</a>
+          <a href="{% url 'prices:today_prices' %}" class="btn btn-agro-outline btn-lg"><i class="bi bi-graph-up me-2"></i>View Today's Prices</a>
+        </div>
+      </div>
+      <div class="col-lg-6 animate-fade-up delay-2">
+        <div class="card-agro p-4">
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="stat-card">
+                <div class="stat-icon icon-green"><i class="bi bi-basket3"></i></div>
+                <div class="stat-value">{{ total_crops }}+</div>
+                <div class="stat-label">Crops Tracked</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="stat-card">
+                <div class="stat-icon icon-amber"><i class="bi bi-graph-up-arrow"></i></div>
+                <div class="stat-value">₹{{ highest_price|default:"0" }}</div>
+                <div class="stat-label">Highest Price Today</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="stat-card">
+                <div class="stat-icon icon-blue"><i class="bi bi-graph-down-arrow"></i></div>
+                <div class="stat-value">₹{{ lowest_price|default:"0" }}</div>
+                <div class="stat-label">Lowest Price Today</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="stat-card">
+                <div class="stat-icon icon-red"><i class="bi bi-fire"></i></div>
+                <div class="stat-value" style="font-size:1.1rem;">{{ trending_crop }}</div>
+                <div class="stat-label">Trending Crop</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="section-title">Everything a farmer needs, in one dashboard</h2>
+      <p class="section-subtitle">From price discovery to profit forecasting — AgroPrice covers the full decision cycle.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="feature-card hover-lift">
+          <div class="feature-icon"><i class="bi bi-search"></i></div>
+          <h5>Search &amp; Track Prices</h5>
+          <p>Instantly search any crop and see live mandi prices sourced from markets across regions.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card hover-lift">
+          <div class="feature-icon"><i class="bi bi-bar-chart-line"></i></div>
+          <h5>Compare Markets</h5>
+          <p>See how the same crop is priced across different mandis and sell where it earns you the most.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card hover-lift">
+          <div class="feature-icon"><i class="bi bi-graph-up"></i></div>
+          <h5>30-Day Trend Analysis</h5>
+          <p>Understand whether prices are rising, falling, or stable with volatility-aware trend charts.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card hover-lift">
+          <div class="feature-icon"><i class="bi bi-calculator"></i></div>
+          <h5>Profit &amp; Revenue Calculator</h5>
+          <p>Enter your yield, cost, and selling price to instantly see your net profit and break-even price.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card hover-lift">
+          <div class="feature-icon"><i class="bi bi-clock-history"></i></div>
+          <h5>Historical Price Records</h5>
+          <p>Look back at past pricing patterns to plan your next sowing and selling cycle better.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card hover-lift">
+          <div class="feature-icon"><i class="bi bi-cloud-upload"></i></div>
+          <h5>CSV Bulk Import (Admin)</h5>
+          <p>Mandi administrators can bulk-upload daily price sheets in seconds via CSV.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="py-5">
+  <div class="container">
+    <div class="card-agro p-5 text-center" style="background:linear-gradient(135deg, rgba(46,125,50,0.06), rgba(255,193,7,0.06));">
+      <h3 class="fw-bold mb-2">Ready to make smarter selling decisions?</h3>
+      <p class="text-muted-soft mb-4">Join thousands of farmers already using AgroPrice to maximize their crop returns.</p>
+      <div class="d-flex justify-content-center gap-2">
+        <a href="{% url 'accounts:farmer_register' %}" class="btn btn-agro btn-lg">Create Free Account</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

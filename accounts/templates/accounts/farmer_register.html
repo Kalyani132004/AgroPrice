@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Farmer Registration — AgroPrice{% endblock %}
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="auth-shell">
+  <div class="auth-visual d-none d-lg-flex">
+    <svg class="auth-illustration" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="330" cy="55" r="42" fill="rgba(255,255,255,0.12)"/>
+      <circle cx="330" cy="55" r="26" fill="#FFC107"/>
+      <path d="M0,250 Q100,215 200,240 T400,225 V320 H0 Z" fill="rgba(255,255,255,0.08)"/>
+      <path d="M0,275 Q120,250 240,270 T400,258 V320 H0 Z" fill="rgba(255,255,255,0.14)"/>
+      <ellipse cx="120" cy="288" rx="90" ry="14" fill="rgba(0,0,0,0.12)"/>
+      <path d="M120,288 C120,210 120,150 120,95" stroke="#ffffff" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M120,190 C82,178 60,140 72,102 C110,112 130,150 120,190 Z" fill="#A5D6A7"/>
+      <path d="M120,160 C158,150 182,112 170,72 C130,84 112,124 120,160 Z" fill="#66BB6A"/>
+      <path d="M120,120 C90,108 76,78 88,48 C120,58 134,90 120,120 Z" fill="#FFFFFF" opacity="0.9"/>
+      <circle cx="245" cy="150" r="10" fill="#FFC107" opacity="0.9"/>
+      <circle cx="70" cy="90" r="7" fill="#FFC107" opacity="0.7"/>
+    </svg>
+    <h2 class="fw-bold mt-4">Join AgroPrice today.</h2>
+    <p class="opacity-75" style="max-width: 420px;">Create your free farmer account to track mandi prices, compare markets, and grow your profits with data.</p>
+    <div class="mt-4">
+      <a href="{% url 'core:home' %}" class="text-white text-decoration-underline"><i class="bi bi-arrow-left me-1"></i> Back to Home</a>
+    </div>
+  </div>
+
+  <div class="auth-form-side">
+    <div class="auth-card" style="max-width: 480px;">
+      <h3 class="fw-bold mb-1">Create Farmer Account</h3>
+      <p class="text-muted-soft mb-4">It only takes a minute.</p>
+
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger py-2 small">
+          {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+        </div>
+      {% endif %}
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-label">Full Name</label>
+            {{ form.full_name }}
+            {% for error in form.full_name.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Username</label>
+            {{ form.username }}
+            {% for error in form.username.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Mobile Number</label>
+            {{ form.phone }}
+            {% for error in form.phone.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+          </div>
+          <div class="col-12">
+            <label class="form-label">Email Address</label>
+            {{ form.email }}
+            {% for error in form.email.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+          </div>
+          <div class="col-12">
+            <label class="form-label">Farm Location</label>
+            {{ form.farm_location }}
+            {% for error in form.farm_location.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Password</label>
+            {{ form.password }}
+            {% for error in form.password.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Confirm Password</label>
+            {{ form.confirm_password }}
+            {% for error in form.confirm_password.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn btn-agro w-100 mt-2"><i class="bi bi-person-check me-2"></i>Create Account</button>
+          </div>
+        </div>
+      </form>
+
+      <p class="text-center small text-muted-soft mt-3">Already have an account? <a href="{% url 'accounts:farmer_login' %}">Login here</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

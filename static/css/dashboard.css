@@ -1,0 +1,153 @@
+/* ===========================================================
+   AgroPrice — Dashboard-specific styles
+=========================================================== */
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.dashboard-header h2 { font-weight: 800; margin-bottom: 0.15rem; }
+.dashboard-header .subtitle { color: var(--color-text-muted); font-size: 0.9rem; }
+
+.chart-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  height: 100%;
+}
+.chart-card h6 { font-weight: 700; margin-bottom: var(--space-3); }
+.chart-card canvas { max-height: 280px; }
+
+.mini-badge-trend-up { color: var(--color-success); font-weight: 700; font-size: 0.8rem; }
+.mini-badge-trend-down { color: var(--color-danger); font-weight: 700; font-size: 0.8rem; }
+
+.price-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--color-surface-muted);
+  border-radius: 999px;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.quick-action-card {
+  border: 1.5px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  text-align: center;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  height: 100%;
+}
+.quick-action-card:hover {
+  border-color: var(--color-primary);
+  background: rgba(46,125,50,0.04);
+}
+.quick-action-card i { font-size: 1.6rem; color: var(--color-primary); margin-bottom: 0.5rem; display: block; }
+
+.profile-avatar {
+  width: 88px; height: 88px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; font-weight: 700;
+}
+
+/* ---------- Smart Sell/Hold Advisor ---------- */
+.advisor-card {
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-left: 5px solid var(--color-text-faint);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+}
+.advisor-icon {
+  width: 46px; height: 46px;
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  background: var(--color-surface-muted);
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+.advisor-verdict { font-size: 1.25rem; font-weight: 800; }
+.advisor-reasons { padding-left: 1.1rem; font-size: 0.88rem; color: var(--color-text-muted); }
+.advisor-reasons li { margin-bottom: 0.25rem; }
+
+.advisor-card.verdict-sell-now,
+.advisor-card.verdict-lean-sell {
+  border-left-color: var(--color-primary);
+}
+.advisor-card.verdict-sell-now .advisor-icon,
+.advisor-card.verdict-lean-sell .advisor-icon {
+  background: rgba(46,125,50,0.12); color: var(--color-primary);
+}
+.advisor-card.verdict-sell-now .advisor-verdict,
+.advisor-card.verdict-lean-sell .advisor-verdict { color: var(--color-primary-dark); }
+
+.advisor-card.verdict-hold,
+.advisor-card.verdict-lean-hold {
+  border-left-color: var(--color-danger);
+}
+.advisor-card.verdict-hold .advisor-icon,
+.advisor-card.verdict-lean-hold .advisor-icon {
+  background: rgba(211,47,47,0.1); color: var(--color-danger);
+}
+.advisor-card.verdict-hold .advisor-verdict,
+.advisor-card.verdict-lean-hold .advisor-verdict { color: var(--color-danger); }
+
+.advisor-card.verdict-neutral { border-left-color: var(--color-accent); }
+.advisor-card.verdict-neutral .advisor-icon { background: rgba(255,193,7,0.18); color: #8a6d00; }
+
+/* ---------- Verdict pill (compact, used in watchlist tables) ---------- */
+.verdict-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+}
+.verdict-pill.pill-sell { background: rgba(46,125,50,0.12); color: var(--color-primary-dark); }
+.verdict-pill.pill-hold { background: rgba(211,47,47,0.1); color: var(--color-danger); }
+.verdict-pill.pill-neutral { background: rgba(255,193,7,0.18); color: #8a6d00; }
+
+.alert-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--color-danger);
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  animation: pulseAlert 1.6s infinite;
+}
+
+.badge{
+    font-size:12px;
+    border-radius:20px;
+    padding:7px 12px;
+}
+
+.card-agro .btn{
+    min-width:140px;
+}
+
+@keyframes pulseAlert {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
