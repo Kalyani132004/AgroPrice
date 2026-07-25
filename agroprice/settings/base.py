@@ -17,6 +17,10 @@ SECRET_KEY = os.environ.get(
     "django-insecure-dev-key-change-this-in-production-3f8a9c2e1b",
 )
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://agroprice.onrender.com",
+]
+
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "*").split(",")
 # ALLOWED_HOSTS = ["agroprice.onrender.com", "localhost", "127.0.0.1"]
 
