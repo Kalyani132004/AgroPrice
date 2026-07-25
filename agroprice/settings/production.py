@@ -3,7 +3,10 @@ import os
 from .base import *  # noqa
 
 DEBUG = False
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",")
+ALLOWED_HOSTS = os.environ.get(
+    "DJANGO_ALLOWED_HOSTS",
+    "agroprice.onrender.com"
+).split(",")
 
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
