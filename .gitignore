@@ -1,46 +1,97 @@
+
 # Virtual Environment
+
 venv/
 env/
 .venv/
 
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
 
-# Django
+# Python Cache Files
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+
+# Django Database
+
 db.sqlite3
 *.sqlite3
 
-# Environment Variables
-.env
 
-# Uploaded CSV Files
+
+# Environment Variables
+
+.env
+.env.*
+
+
+
+# Django Media / Uploaded Files
+
+media/
+!media/csv_uploads/
 media/csv_uploads/*
 !media/csv_uploads/.gitkeep
 
-# Collected Static Files
+
+
+# Static Collected Files
+
 staticfiles/
 
-# IDE
+
+
+# Django Migrations Cache
+
+**/migrations/__pycache__/
+
+
+# MongoDB Local Files
+
+*.bson
+*.json.backup
+
+
+
+# IDE Settings
+
 .vscode/
 .idea/
 
+
+# ==========================
 # Logs
+# ==========================
 *.log
 
-# OS Files
+
+# ==========================
+# OS Generated Files
+
 .DS_Store
 Thumbs.db
 
-# Test / Cache
+
+
+# Testing / Coverage
+
 .pytest_cache/
 .mypy_cache/
 .coverage
 htmlcov/
 
-# Build Files
+
+
+# Build / Package Files
+
 build/
 dist/
 *.egg-info/
+
+
+# Temporary Files
+
+*.tmp
+*.temp
+*.bak

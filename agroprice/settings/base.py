@@ -10,6 +10,8 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 load_dotenv(BASE_DIR / ".env")
 
+DATA_GOV_API_KEY = os.getenv("DATA_GOV_API_KEY")
+
 SECRET_KEY = os.environ.get(
     "DJANGO_SECRET_KEY",
     "django-insecure-dev-key-change-this-in-production-3f8a9c2e1b",

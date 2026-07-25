@@ -1,17 +1,80 @@
 """PriceService — business logic layer for all price operations."""
+from datetime import datetime
+
 from core.utils.datetime_utils import format_display_date
 from core.utils.math_utils import mean, safe_round
-from core.utils.regex_validators import validate_crop_name, validate_quality, validate_price, ValidationError
+from core.utils.regex_validators import (validate_crop_name, validate_quality, validate_price, ValidationError,)
 from db.base_repository import RepositoryError
 from db.repositories.price_repository import PriceRepository
 from prices.domain.price_record import PriceRecord
+from prices.services.agmarknet_service import AgmarknetService
 
 
 class PriceService:
     def __init__(self):
         self.repo = PriceRepository()
+        
+    def sync_live_prices(self):
 
-    # ---------- CRUD ----------
+        records = AgmarknetService.get_today_prices()
+
+        inserted = 0
+
+        for r in records:
+
+            try:
+                crop_name = r.get("commodity", "").strip()
+                market = r.get("market", "").strip()
+                quality = r.get("grade", "FAQ").strip()
+
+                modal_price = r.get("modal_price")
+
+                # Skip invalid records
+                if not crop_name or not market or modal_price is None:
+                    continue
+
+                try:
+                    price = float(modal_price)
+                except (TypeError, ValueError):
+                    continue
+
+                # Parse API date
+                try:
+                    api_date = datetime.strptime(
+                        r.get("arrival_date"),
+                        "%d/%m/%Y"
+                    )
+                except Exception:
+                    api_date = datetime.utcnow()
+
+                # Check duplicate
+                existing = self.repo.find_one({
+                    "crop_name": crop_name,
+                    "market": market,
+                    "date": api_date
+                })
+
+                if existing:
+                    continue
+
+                # Insert record
+                self.repo.insert_one({
+                    "crop_name": crop_name,
+                    "market": market,
+                    "price": price,
+                    "quality": quality,
+                    "date": api_date
+                })
+
+                inserted += 1
+
+            except Exception as e:
+                print("Live Price Sync Error:", e)
+                continue
+
+        return inserted
+
+    # CRUD
     def add_price(self, crop_name: str, market: str, price, quality: str) -> str:
         try:
             crop_name = validate_crop_name(crop_name)
@@ -38,7 +101,7 @@ class PriceService:
         except RepositoryError as exc:
             raise ValidationError(str(exc)) from exc
 
-    # ---------- Read / analytics ----------
+    #  Read / analytics
     def today_prices(self) -> list:
         rows = self.repo.today_prices()
         for r in rows:
