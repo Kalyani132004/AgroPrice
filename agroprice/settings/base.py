@@ -17,7 +17,8 @@ SECRET_KEY = os.environ.get(
     "django-insecure-dev-key-change-this-in-production-3f8a9c2e1b",
 )
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "*").split(",")
+# ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "*").split(",")
+ALLOWED_HOSTS = ["agroprice.onrender.com", "localhost", "127.0.0.1"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
