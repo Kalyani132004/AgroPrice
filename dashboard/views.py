@@ -1,11 +1,13 @@
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.models import User
 
-from django.shortcuts import render, redirect
 from accounts.models import Profile
 from core.decorators import admin_required, farmer_required
 from dashboard.services.dashboard_service import DashboardService
 from db.repositories.contact_repository import ContactMessageRepository
 from db.repositories.user_profile_repository import UserProfileRepository
 from prices.services.price_service import PriceService
+from django.contrib import messages
 
 
 @farmer_required
@@ -21,7 +23,6 @@ def admin_dashboard_view(request):
 
     data = service.admin_dashboard_data()
 
-    # MongoDB farmers data
     user_repo = UserProfileRepository()
     farmers = user_repo.find({"role": "farmer"})
 
@@ -33,6 +34,7 @@ def admin_dashboard_view(request):
     data["total_farmers"] = len(farmers)
 
     return render(request, "dashboard/admin_dashboard.html", data)
+
 
 @admin_required
 def registered_farmers(request):
@@ -56,12 +58,37 @@ def registered_farmers(request):
         }
     )
 
+
+# DELETE FARMER
+@admin_required
+def delete_farmer(request, auth_user_id):
+
+    if request.method == "POST":
+
+        user_repo = UserProfileRepository()
+
+        # Delete MongoDB farmer profile
+        user_repo.delete_by_auth_id(auth_user_id)
+
+        # Delete Django User
+        user = User.objects.filter(id=auth_user_id).first()
+
+        if user:
+            user.delete()
+
+        messages.success(
+            request,
+            "Farmer deleted successfully."
+        )
+
+    return redirect("dashboard:registered_farmers")
+
+
 @admin_required
 def reports_view(request):
     price_service = PriceService()
     today_prices = price_service.today_prices()
 
-    # MongoDB farmer count
     user_repo = UserProfileRepository()
     total_farmers = user_repo.count({"role": "farmer"})
 
@@ -76,6 +103,7 @@ def reports_view(request):
 
 @admin_required
 def contact_messages_view(request):
+
     repo = ContactMessageRepository()
 
     messages_list = repo.recent(limit=100)
@@ -108,7 +136,7 @@ def contact_messages_view(request):
         },
     )
 
-# Mark Contact Message as Read
+
 @admin_required
 def mark_message_read(request, message_id):
 
@@ -118,8 +146,6 @@ def mark_message_read(request, message_id):
 
     return redirect("dashboard:contact_messages")
 
-
-# Delete Contact Message
 
 @admin_required
 def delete_message(request, message_id):
