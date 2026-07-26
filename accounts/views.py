@@ -3,9 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-import os
-from django.http import HttpResponse
+
 from accounts.forms import FarmerRegistrationForm, LoginForm, ProfileEditForm
 from accounts.services.auth_service import AuthService, AuthServiceError
 from core.utils.regex_validators import validate_phone, ValidationError as RegexValidationError
@@ -129,19 +127,3 @@ def settings_view(request):
 
 
 
-def create_admin_once(request):
-    username = "AgroPrice"
-    password = os.environ.get("ADMIN_PASSWORD")
-
-    if not password:
-        return HttpResponse("ADMIN_PASSWORD missing")
-
-    if not User.objects.filter(username=username).exists():
-        User.objects.create_superuser(
-            username=username,
-            email="agroprice@gmail.com",
-            password=password
-        )
-        return HttpResponse("Admin created")
-
-    return HttpResponse("Admin already exists")
