@@ -41,21 +41,31 @@ class PriceRepository(BaseRepository):
         return self.aggregate(pipeline)
 
     def today_prices(self) -> list:
-        today_start = datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
+        today_start = datetime.utcnow().replace(
+            hour=0,
+            minute=0,
+            second=0,
+            microsecond=0
+        )
+
         pipeline = [
-            {"$match": {"date": {"$gte": today_start}}},
-            {"$sort": {"date": -1}},
             {
-                "$group": {
-                    "_id": "$crop_name",
-                    "price": {"$first": "$price"},
-                    "market": {"$first": "$market"},
-                    "date": {"$first": "$date"},
-                    "quality": {"$first": "$quality"},
+                "$match": {
+                    "date": {
+                        "$gte": today_start
+                    }
                 }
             },
-            {"$sort": {"_id": 1}},
+            {
+                "$sort": {
+                    "date": -1
+                }
+            },
+            {
+                "$limit": 50
+            }
         ]
+
         return self.aggregate(pipeline)
 
     # ---------- 30-day average / high / low (aggregation) ----------
