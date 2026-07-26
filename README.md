@@ -1,10 +1,11 @@
 # 🌾 AgroPrice — Mandi Price Tracker & Crop Profit Analyzer
 
-AgroPrice is a web-based **Agritech platform** developed using **Python, Django, MongoDB, Bootstrap, JavaScript, and Django REST Framework**.
+AgroPrice is a web-based **Agritech platform** developed using **Python, Django, MongoDB, PostgreSQL, Django REST Framework, Bootstrap, JavaScript, and PyMongo**.
 
 The system helps farmers monitor mandi crop prices, analyze market trends, compare market rates, and calculate expected crop profitability before selling their produce.
 
-AgroPrice provides separate dashboards for **Farmers** and **Administrators** with secure role-based authentication and data-driven insights.
+AgroPrice provides separate dashboards for **Farmers and Administrators** with secure authentication, role-based access control, market analytics, and data visualization.
+
 
 ---
 
@@ -13,14 +14,15 @@ AgroPrice provides separate dashboards for **Farmers** and **Administrators** wi
 ## 👨‍🌾 Farmer Module
 
 - Farmer Registration and Login
-- Secure Authentication
-- Personalized Farmer Dashboard
+- Secure Authentication System
+- Farmer Dashboard
 - Live Mandi Crop Prices
 - Crop Watchlist Management
-- Price Trend Analysis
+- Historical Price Tracking
 - Market Price Comparison
+- 30-Day Price Trend Analysis
 - Sell/Hold Recommendation
-- Revenue & Profit Calculator
+- Revenue Calculator
 - Crop Profitability Analysis
 
 
@@ -31,8 +33,9 @@ AgroPrice provides separate dashboards for **Farmers** and **Administrators** wi
 - Admin Dashboard
 - Role-Based Access Control
 - Manage Crops
-- Manage Crop Prices
+- Manage Mandi Prices
 - View Registered Farmers
+- Delete Farmer Records
 - View Contact Messages
 - Upload Bulk Price Data using CSV
 - Download Price Reports
@@ -43,41 +46,116 @@ AgroPrice provides separate dashboards for **Farmers** and **Administrators** wi
 
 # 📊 Analytics Module
 
-AgroPrice provides crop market analysis using:
+AgroPrice provides market insights using:
 
 - 30-Day Price Trend Analysis
 - Average Price Calculation
 - Highest Price Detection
 - Lowest Price Detection
-- Market Volatility Analysis
+- Market Comparison
+- Price Volatility Analysis
 - Profit Margin Calculation
-- Break-even Price Calculation
+- Break-Even Price Calculation
 - Rule-Based Sell Advisor
+
+
+---
+
+# 🌐 External API Integration
+
+AgroPrice integrates with the **Government of India Open Data Platform (data.gov.in)** for mandi price data.
+
+The application uses the **Agmarknet Mandi Price API** to fetch agricultural market information.
+
+API Data Includes:
+
+- Crop Name
+- Market Name
+- Commodity Prices
+- Quality Information
+- Market Updates
+
+
+## Data Flow
+
+```
+data.gov.in Agmarknet API
+
+        ↓
+
+Django API Service
+
+        ↓
+
+Data Processing & Validation
+
+        ↓
+
+MongoDB pricehistory Collection
+
+        ↓
+
+Farmer Dashboard & Analytics
+```
+
+
+API is used for:
+
+- Live mandi price updates
+- Historical price storage
+- Market comparison
+- Price trend analysis
+- Crop analytics
 
 
 ---
 
 # 🌐 REST API
 
-Developed using **Django REST Framework (DRF)**.
+AgroPrice APIs are developed using **Django REST Framework (DRF).**
 
-Available APIs:
+The application provides APIs for:
 
-- Crop APIs
-- Price APIs
-- Analytics APIs
-- Watchlist APIs
+- Crop Management
+- Mandi Price Data
+- Historical Price Records
+- Market Comparison
+- Analytics
+- Profit Calculation
+- Watchlist Management
+
+
+---
+
+# 🔗 API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/v1/crops/` | View Crop List |
+| GET | `/api/v1/prices/today/` | Today's Mandi Prices |
+| GET | `/api/v1/prices/history/` | Historical Price Data |
+| GET | `/api/v1/prices/compare/` | Compare Market Prices |
+| POST | `/api/v1/prices/upload-csv/` | Upload CSV Price Data |
+| GET | `/api/v1/analytics/trend/` | Price Trend Analysis |
+| POST | `/api/v1/analytics/profit/` | Crop Profit Calculation |
 
 
 ---
 
 # 🗄️ Database
 
-AgroPrice uses **MongoDB** as the primary database.
+AgroPrice uses **MongoDB** as the primary application database.
 
 MongoDB is integrated with Django using **PyMongo**.
 
-## Database Collections
+Database:
+
+```
+agroprice_db
+```
+
+
+Collections:
 
 ```
 agroprice_db
@@ -88,6 +166,54 @@ agroprice_db
 └── contact_messages
 ```
 
+
+## Collection Usage
+
+### users
+
+Stores:
+
+- Farmer profile information
+- Phone number
+- Farm location
+- Preferred crops
+
+
+### crops
+
+Stores:
+
+- Crop name
+- Category
+- Unit
+- Quality grades
+
+
+### pricehistory
+
+Stores:
+
+- Crop prices
+- Market information
+- Quality details
+- Historical mandi records
+
+
+### contact_messages
+
+Stores:
+
+- User contact queries
+- Submitted messages
+
+
+Django's built-in authentication system is used for:
+
+- User login
+- Admin authentication
+- Password management
+
+
 ---
 
 # 📈 Data Visualization
@@ -97,8 +223,9 @@ Interactive charts are implemented using **Chart.js**.
 Charts included:
 
 - Crop Price Trend Line Chart
-- Category Wise Price Bar Chart
-- Crop Price Distribution Chart
+- Market Comparison Chart
+- Category Wise Price Analysis
+- Price Distribution Visualization
 
 
 ---
@@ -111,8 +238,11 @@ Charts included:
 | Backend | Python, Django |
 | API | Django REST Framework |
 | Database | MongoDB |
+| Authentication Database | PostgreSQL |
 | Database Connector | PyMongo |
-| Visualization | Chart.js |
+| External API | Government Open Data API (data.gov.in) |
+| Data Visualization | Chart.js |
+| Deployment | Render |
 | Version Control | Git & GitHub |
 | IDE | Visual Studio Code |
 
@@ -123,30 +253,31 @@ Charts included:
 
 ```
 AgroPrice
+
 │
 ├── accounts
-│   └── Authentication, Farmer/Admin Profile Management
+│   └── Authentication and Farmer/Admin Profile Management
 │
 ├── crops
 │   └── Crop Management System
 │
 ├── prices
-│   └── Mandi Price Management & CSV Processing
+│   └── Mandi Price Management and CSV Processing
 │
 ├── analytics
-│   └── Trend Analysis & Profit Calculator
+│   └── Trend Analysis and Profit Calculation
 │
 ├── dashboard
-│   └── Farmer/Admin Dashboard
+│   └── Farmer and Admin Dashboards
 │
 ├── api
-│   └── REST API Services
+│   └── Django REST Framework APIs
 │
 ├── db
-│   └── MongoDB Connection & Repository Layer
+│   └── MongoDB Connection and Repository Layer
 │
 ├── core
-│   └── Common Utilities
+│   └── Validators and Common Utilities
 │
 ├── templates
 │   └── Django HTML Templates
@@ -158,9 +289,11 @@ AgroPrice
     └── Database Utility Scripts
 ```
 
+
 ---
 
 # ⚙️ Installation & Setup
+
 
 ## 1. Clone Repository
 
@@ -168,11 +301,12 @@ AgroPrice
 git clone https://github.com/Kalyani132004/AgroPrice.git
 ```
 
-Move into project folder:
+Move into project directory:
 
 ```bash
 cd AgroPrice
 ```
+
 
 ---
 
@@ -182,7 +316,9 @@ cd AgroPrice
 python -m venv venv
 ```
 
-Activate virtual environment:
+
+Activate Environment:
+
 
 ### Windows
 
@@ -190,29 +326,41 @@ Activate virtual environment:
 venv\Scripts\activate
 ```
 
+
 ---
 
-## 3. Install Required Packages
+## 3. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
+
 ---
 
-## 4. Configure MongoDB
+## 4. Configure Environment Variables
 
-Start MongoDB locally:
 
-```
-mongodb://localhost:27017
-```
+Create `.env` file:
 
-Database name:
 
 ```
-agroprice_db
+MONGO_URI=your_mongodb_connection_string
+
+DB_NAME=agroprice_db
+
+SECRET_KEY=your_secret_key
+
+DEBUG=True
 ```
+
+
+For production:
+
+```
+DEBUG=False
+```
+
 
 ---
 
@@ -224,6 +372,7 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
+
 ---
 
 ## 6. Create Admin Account
@@ -231,6 +380,7 @@ python manage.py migrate
 ```bash
 python manage.py createsuperuser
 ```
+
 
 ---
 
@@ -240,25 +390,56 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-Open browser:
+
+Open:
 
 ```
 http://127.0.0.1:8000/
 ```
 
+
 ---
 
-# 🔌 API Endpoints
+# 📂 CSV Price Import Format
 
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/v1/crops/` | View Crop List |
-| GET | `/api/v1/prices/today/` | Today's Prices |
-| GET | `/api/v1/prices/history/` | Historical Price Data |
-| GET | `/api/v1/prices/compare/` | Market Comparison |
-| POST | `/api/v1/prices/upload-csv/` | Upload CSV Price Data |
-| GET | `/api/v1/analytics/trend/` | Price Trend Analysis |
-| POST | `/api/v1/analytics/profit/` | Profit Calculation |
+AgroPrice supports bulk mandi price upload using CSV.
+
+
+Format:
+
+```
+crop_name,market,price,quality,date
+```
+
+
+Example:
+
+```
+Tomato,Pune APMC,2500,Grade-A,2026-07-20
+```
+
+
+---
+
+# 💰 Crop Profit Calculator
+
+
+Farmers can calculate expected profit using:
+
+
+```
+Profit = Total Revenue - Total Cultivation Cost
+```
+
+
+Calculation includes:
+
+- Crop Quantity
+- Selling Price
+- Cultivation Cost
+- Labour Cost
+- Transportation Cost
+- Miscellaneous Expenses
 
 
 ---
@@ -273,45 +454,67 @@ This project demonstrates:
 - File Handling
 - CSV Processing
 - Regular Expressions
-- Datetime Operations
+- DateTime Operations
 - MongoDB CRUD Operations
-- Aggregation Queries
+- MongoDB Aggregation Pipeline
+- Repository Pattern
 - Multithreading
 
 
 ---
 
-# 📂 CSV Price Import Format
+# 🚀 Deployment
 
-CSV file format:
 
-```
-crop_name,market,price,quality,date
-```
+AgroPrice is deployed using **Render**.
 
-Example:
+
+Live Application:
 
 ```
-Tomato,Pune APMC,2500,A,2026-07-20
+https://agroprice.onrender.com/
 ```
 
----
 
-# 💰 Crop Profit Calculator
+Deployment Architecture:
 
-Farmers can calculate expected profit using:
 
 ```
-Profit = Total Revenue - Total Cultivation Cost
+User
+
+ ↓
+
+Render Web Service
+
+ ↓
+
+Django Application
+
+ ↓
+
+PostgreSQL
+(Authentication Data)
+
+ ↓
+
+MongoDB Atlas
+(Application Data)
+
+ ↓
+
+data.gov.in API
+(Mandi Price Data)
 ```
 
-Calculation includes:
 
-- Crop Quantity
-- Selling Price
-- Labour Cost
-- Transportation Cost
-- Miscellaneous Expenses
+Deployment includes:
+
+- Django Web Service
+- PostgreSQL Database
+- MongoDB Atlas
+- Gunicorn WSGI Server
+- WhiteNoise Static File Handling
+
 
 ---
 
@@ -328,14 +531,20 @@ Calculation includes:
 
 ---
 
-# 👩‍💻 Developer
+🌐 **Live Demo**
 
-**Kalyani Sonawane**
+https://agroprice.onrender.com/
 
 GitHub:
 
 https://github.com/Kalyani132004
 
+---
+
+# 👩‍💻 Developer
+
+
+**Kalyani Sonawane**
 
 ---
 
