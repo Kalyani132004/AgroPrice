@@ -67,22 +67,42 @@ def delete_farmer(request, auth_user_id):
 
         user_repo = UserProfileRepository()
 
-        # Delete MongoDB farmer profile
+        # First check MongoDB profile
+        farmer = user_repo.find_by_auth_id(auth_user_id)
+
+        if not farmer:
+            messages.error(request, "Farmer not found.")
+            return redirect("dashboard:registered_farmers")
+
+
+        # Safety check
+        if farmer.get("role") != "farmer":
+            messages.error(request, "Only farmers can be deleted.")
+            return redirect("dashboard:registered_farmers")
+
+
+        # Delete MongoDB profile
         user_repo.delete_by_auth_id(auth_user_id)
 
-        # Delete Django User
-        user = User.objects.filter(id=auth_user_id).first()
+
+        # Delete Django user only if NOT admin
+        user = User.objects.filter(
+            id=auth_user_id,
+            is_staff=False
+        ).first()
+
 
         if user:
             user.delete()
+
 
         messages.success(
             request,
             "Farmer deleted successfully."
         )
 
-    return redirect("dashboard:registered_farmers")
 
+    return redirect("dashboard:registered_farmers")
 
 @admin_required
 def reports_view(request):
