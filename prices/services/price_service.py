@@ -104,9 +104,10 @@ class PriceService:
     #  Read / analytics
     def today_prices(self) -> list:
         rows = self.repo.today_prices()
+
         for r in rows:
-            r["crop_name"] = r.pop("_id")
             r["date_display"] = format_display_date(r.get("date"))
+
         return rows
 
     def history(self, crop_name: str, days: int = 30) -> list:
