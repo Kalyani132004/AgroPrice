@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 
 class Command(BaseCommand):
-    help = "Create or update admin user"
+    help = "Create admin user"
 
     def handle(self, *args, **kwargs):
 
@@ -19,26 +19,27 @@ class Command(BaseCommand):
             )
             return
 
-        user, created = User.objects.get_or_create(
-            username=username,
-            defaults={
-                "email": email,
-                "is_staff": True,
-                "is_superuser": True,
-            }
-        )
+        if not User.objects.filter(username=username).exists():
 
-        user.email = email
-        user.is_staff = True
-        user.is_superuser = True
-        user.set_password(password)
-        user.save()
+            User.objects.create_superuser(
+                username=username,
+                email=email,
+                password=password
+            )
 
-        if created:
             self.stdout.write(
                 self.style.SUCCESS("Admin created")
             )
+
         else:
+
+            user = User.objects.get(username=username)
+
+            user.set_password(password)
+            user.is_staff = True
+            user.is_superuser = True
+            user.save()
+
             self.stdout.write(
                 self.style.SUCCESS("Admin password updated")
             )
