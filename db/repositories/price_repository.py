@@ -45,7 +45,7 @@ class PriceRepository(BaseRepository):
             hour=0,
             minute=0,
             second=0,
-            microsecond=0
+            microsecond=0,
         )
 
         pipeline = [
@@ -62,12 +62,26 @@ class PriceRepository(BaseRepository):
                 }
             },
             {
-                "$limit": 50
+                "$group": {
+                    "_id": {
+                        "crop_name": "$crop_name",
+                        "market": "$market"
+                    },
+                    "crop_name": {"$first": "$crop_name"},
+                    "market": {"$first": "$market"},
+                    "price": {"$first": "$price"},
+                    "quality": {"$first": "$quality"},
+                    "date": {"$first": "$date"},
+                }
+            },
+            {
+                "$sort": {
+                    "crop_name": 1
+                }
             }
         ]
 
         return self.aggregate(pipeline)
-
     # ---------- 30-day average / high / low (aggregation) ----------
     def thirty_day_stats(self, crop_name: str) -> dict:
         since = datetime.utcnow() - timedelta(days=30)

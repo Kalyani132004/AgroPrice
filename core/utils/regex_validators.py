@@ -92,3 +92,5 @@ def is_safe_search_query(query: str) -> bool:
             (query or "").strip()
         )
     )
+    
+    
