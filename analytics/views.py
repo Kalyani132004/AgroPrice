@@ -41,6 +41,36 @@ def revenue_calculator_view(request):
     crop_service = CropService()
     result = None
 
+    def format_inr(amount):
+        amount = float(amount)
+
+        sign = "-" if amount < 0 else ""
+        amount = abs(amount)
+
+        integer = int(amount)
+        decimal = amount - integer
+
+        s = str(integer)
+
+        if len(s) > 3:
+            last3 = s[-3:]
+            rest = s[:-3]
+
+            parts = []
+            while len(rest) > 2:
+                parts.insert(0, rest[-2:])
+                rest = rest[:-2]
+
+            if rest:
+                parts.insert(0, rest)
+
+            s = ",".join(parts) + "," + last3
+
+        if decimal:
+            s += f"{decimal:.2f}"[1:]
+
+        return f"{sign}₹{s}"
+
     if request.method == "POST":
         calculator = ProfitCalculator(
             quantity=request.POST.get("quantity", 0),
@@ -50,9 +80,20 @@ def revenue_calculator_view(request):
             labour_cost=request.POST.get("labour_cost", 0),
             misc_cost=request.POST.get("misc_cost", 0),
         )
+
         result = calculator.summary()
 
-    return render(request, "analytics/revenue_calculator.html", {
-        "crops": crop_service.list_all(),
-        "result": result,
-    })
+        # Format currency values in Indian format
+        result["total_revenue"] = format_inr(result["total_revenue"])
+        result["total_cost"] = format_inr(result["total_cost"])
+        result["net_profit"] = format_inr(result["net_profit"])
+        result["break_even_price"] = format_inr(result["break_even_price"])
+
+    return render(
+        request,
+        "analytics/revenue_calculator.html",
+        {
+            "crops": crop_service.list_all(),
+            "result": result,
+        },
+    )
