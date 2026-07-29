@@ -41,21 +41,12 @@ class PriceRepository(BaseRepository):
         return self.aggregate(pipeline)
 
     def today_prices(self) -> list:
-        today_start = datetime.utcnow().replace(
-            hour=0,
-            minute=0,
-            second=0,
-            microsecond=0,
-        )
+        """
+        Returns the latest available price for each Crop + Market.
+        This avoids timezone/date issues and always shows live data.
+        """
 
         pipeline = [
-            {
-                "$match": {
-                    "date": {
-                        "$gte": today_start
-                    }
-                }
-            },
             {
                 "$sort": {
                     "date": -1
@@ -76,12 +67,16 @@ class PriceRepository(BaseRepository):
             },
             {
                 "$sort": {
-                    "crop_name": 1
+                    "crop_name": 1,
+                    "market": 1
                 }
             }
         ]
 
         return self.aggregate(pipeline)
+        
+    
+    
     # ---------- 30-day average / high / low (aggregation) ----------
     def thirty_day_stats(self, crop_name: str) -> dict:
         since = datetime.utcnow() - timedelta(days=30)
