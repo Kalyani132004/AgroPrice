@@ -6,7 +6,9 @@ phone numbers, CSV row sanity checks).
 import re
 
 
-CROP_NAME_PATTERN = re.compile(r"^[A-Za-z\s\(\)\-]{2,80}$")
+CROP_NAME_PATTERN = re.compile(
+    r"^[A-Za-z0-9\s\(\)\-\/\.,&]{2,100}$"
+)
 
 QUALITY_PATTERN = re.compile(
     r"^(FAQ|Grade[- ]?[ABC]|Premium|Standard|Medium|Local)$",
@@ -88,7 +90,7 @@ def is_safe_search_query(query: str) -> bool:
 
     return bool(
         re.match(
-            r"^[A-Za-z0-9\s\-]{1,50}$",
+            r"^[A-Za-z0-9\s\-\(\)\/\.,&]{1,100}$",
             (query or "").strip()
         )
     )
