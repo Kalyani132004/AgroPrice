@@ -16,7 +16,7 @@ AgroPrice provides separate dashboards for **Farmers and Administrators** with s
 - Farmer Registration and Login
 - Secure Authentication System
 - Farmer Dashboard
-- Live Mandi Crop Prices
+- Latest Mandi Crop Prices
 - Crop Watchlist Management
 - Historical Price Tracking
 - Market Price Comparison
@@ -101,7 +101,7 @@ Farmer Dashboard & Analytics
 
 API is used for:
 
-- Live mandi price updates
+- Latest mandi price updates
 - Historical price storage
 - Market comparison
 - Price trend analysis
@@ -132,7 +132,7 @@ The application provides APIs for:
 | Method | Endpoint | Description |
 |---|---|---|
 | GET | `/api/v1/crops/` | View Crop List |
-| GET | `/api/v1/prices/today/` | Today's Mandi Prices |
+| GET | `/api/v1/prices/today/` | Latest Mandi Prices |
 | GET | `/api/v1/prices/history/` | Historical Price Data |
 | GET | `/api/v1/prices/compare/` | Compare Market Prices |
 | POST | `/api/v1/prices/upload-csv/` | Upload CSV Price Data |
